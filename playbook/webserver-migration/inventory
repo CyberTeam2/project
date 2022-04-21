@@ -1,0 +1,18 @@
+#Must run as ansible user su ansible
+[web126]
+192.168.35.60 ansible_user=ansible ansible_become_user=root ansible_become_pass=password
+
+[web127]
+192.168.35.61 ansible_user=ansible ansible_become_user=root ansible_become_pass=password
+
+[web226]
+192.168.35.62 ansible_user=ansible ansible_become_user=root ansible_become_pass=password
+
+[web227]
+192.168.35.63 ansible_user=ansible ansible_become_user=root ansible_become_pass=password
+
+[web326]
+192.168.35.64 ansible_user=ansible ansible_become_user=root ansible_become_pass=password
+
+[web327]
+192.168.35.65 ansible_user=ansible ansible_become_user=root ansible_become_pass=password

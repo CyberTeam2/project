@@ -1,0 +1,42 @@
+---
+ - name: Installing Nfs Packages and configuring files
+   hosts: nfs
+   become: true
+
+   tasks:
+     - name: Installing pkgs
+       yum:
+         name: "nfs-utils"
+         state: latest
+     - name: Start and and enable rpcbind    
+       service:
+         name: rpcbind
+         state: started
+         enabled: yes
+    
+     - name: Start and enable nfs server
+       service:
+         name: nfs-lock
+         state: started
+         enabled: yes      
+     - name: Start and enable nfs-idmap
+       service: 
+         name: nfs-idmap
+         state: started
+         enabled: yes   
+
+     - name: Create a mountable directory if it does not exist
+       file:
+         path: /var/nfsshare
+         state: directory
+         owner: nfsnobody
+         group: nfsnobody
+         mode: '0775'       
+     - name: Export files
+       shell: exportfs -va
+
+    #  - name: Disabling firewalld
+    #    service:
+    #      name: firewalld
+    #      state: stopeed
+    #      enabled: false          

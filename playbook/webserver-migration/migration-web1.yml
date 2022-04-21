@@ -1,0 +1,29 @@
+---
+- name: run task on given host
+  hosts: web126
+  remote_user: ansible
+  become: true
+  become_method: sudo
+  tasks:
+ 
+  # - name: copy directory contents to remote host
+  #   synchronize:
+  #   delegate_to: "{{ web127 }}"
+  #     src: /var/www/html/
+  #     dest: /usr/share/nginx/
+  #     mode: pull
+      
+  - name: Synchronize two directories on one remote host.
+    synchronize:
+      src: /var/www/html/
+      dest: /usr/share/nginx/
+    delegate_to: 192.168.35.61    
+  
+  # - name: copy directory contents to remote host
+  #   shell:
+  #     cmd: scp -r /var/www/html/* 192.168.35.61:/usr/share/nginx/*
+
+  - name: restart nginx for changes to take effect
+    service:
+      name: nginx
+      state: restart

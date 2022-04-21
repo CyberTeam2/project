@@ -1,0 +1,6 @@
+---
+- name: Installing MariaDB Database with GUI
+  hosts: db126
+  become: yes
+  roles:
+    - /home/ansible/roles/team2.mysql

@@ -1,0 +1,50 @@
+--- 
+- become: true
+  hosts: all
+  tasks: 
+    - name: Install ftpclient
+      yum: name=ftp
+
+- become: true
+  hosts: ftp
+  tasks:
+  - name: Installing vsftpd package
+    yum:
+     name: vsftpd
+     state: latest
+     update_cache: yes
+
+  - name: Disabling SELINUX
+    shell: 'setenforce 0'
+
+
+# - name: "Creating ftp directory"
+#   file: 
+#     group: ftpuser
+#     mode: "0075"
+#     owner: ftpuser
+#     path: /var/ftp/pub
+#     state: directory
+  
+
+# - name: "Configuring /etc/vsftpd/vstfpd.conf"
+#   shell: sudo echo \"anon_root=/var/ftp/pub\" >> /etc/vsftpd/vsftpd.conf
+#     #cmd: "sudo echo \"anon_root=/var/ftp/pub\" >> /etc/vsftpd/vsftpd.conf"
+
+# - name: "Configuring /etc/vsftpd/vstfpd.conf"
+#   shell: sudo echo \"anonymous_enable=YES\" >> /etc/vsftpd/vsftpd.conf
+#     #cmd: "sudo echo \"anonymous_enable=YES\" >> /etc/vsftpd/vsftpd.conf"
+# - name: "Configuring /etc/vsftpd/vstfpd.conf"
+#   shell: sudo echo \"local_enable=YES\" >> /etc/vsftpd/vsftpd.conf
+#     #cmd: "sudo echo \"local_enable=YES\" >> /etc/vsftpd/vsftpd.conf"
+
+  - name: Restart vsftpd service
+    service:
+      name: vsftpd
+      state: restarted
+      enabled: yes
+
+  -   name: ftp
+      systemd: 
+        name: firewalld
+        state: stopped

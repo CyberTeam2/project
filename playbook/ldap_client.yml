@@ -1,0 +1,25 @@
+---
+- name: install all initial packages
+  hosts: all
+  become: true
+  
+  tasks:
+    - name: check and install nfs packages
+      yum:
+        name: ['openldap-clients','nss-pam-ldapd','authconfig','nfs-utils','autofs']
+        state: latest
+    # - name: changing selinux status
+    #   shell: 
+    #     cmd: setenforce 0
+
+   # - name: Creating DIR for LDAP CA.crt
+    #  shell: 
+     #   cmd: mkdir /etc/openldap/cacerts
+     # ignore_errors: yes
+   # - name: downloading the cert for LDAP CA.crt
+    #  shell:
+     #   cmd: cd /etc/openldap/cacerts &&  wget http://192.168.35.90/CA.crt
+   # - name: configuring the AUTHCONFIG
+    #  shell:
+     #   cmd: authconfig --enableforcelegacy --update && authconfig --enableldap --enableldapauth --enablemkhomedir --ldapserver="192.168.35.90" --ldapbasedn="dc=ziyotek2,dc=local" --update
+

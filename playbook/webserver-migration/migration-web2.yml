@@ -1,0 +1,29 @@
+---
+- name: run task on given host
+  hosts: web126
+  remote_user: ansible
+  become: true
+  become_method: sudo
+  tasks:
+ 
+  - name: copy directory contents to remote host
+    shell:
+      cmd: scp -r /var/www/html/* 192.168.35.61:/usr/share/nginx/*
+
+  - name: restart nginx for changes to take effect
+    service:
+      name: nginx
+      state: restart
+
+# - name: run tasks on given host
+#   host: web126
+#   remote_user: ansible
+#   become: yes
+#   task:
+#   - name: copy directory contents to remote host
+#     command: scp -r /var/www/html/* 192.168.35.61:/usr/share/nginx/*
+
+#   - name: restart nginx for changes to take effect
+#     service:
+#       name: nginx
+#       state: restart

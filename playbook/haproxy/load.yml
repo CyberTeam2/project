@@ -1,0 +1,6 @@
+---
+- name: Running load balancer roles
+  hosts: ha126
+  become: yes
+  roles:
+    - /home/ansible/roles/haproxy2
