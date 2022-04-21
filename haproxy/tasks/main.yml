@@ -1,0 +1,46 @@
+---
+- name: Install package haproxy
+  yum:
+    name: haproxy
+    state: latest
+
+- name: Send config file from template
+  template:
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+    backup: yes
+
+- name: Uncommit rsyslog.conf
+  lineinfile:
+    path: /etc/rsyslog.conf
+    regex: '#module(load="imudp")'
+    line:  module(load="imudp")
+
+- name: Uncommit rsyslog.conf
+  lineinfile:
+    path: /etc/rsyslog.conf
+    regex: '#input(type="imudp" port="514")'
+    line: input(type="imudp" port="514")
+
+- name: Send config file from template
+  template:
+    src: haproxy.conf
+    dest: /etc/rsyslog.d/
+    backup: yes    
+
+- name: Start service
+  service:
+    name: rsyslog
+    state: restarted
+    enabled: yes
+
+- name: add port
+  shell:
+    cmd: "{{ item }}"
+  loop: "{{ add_ports }}"  
+
+- name: Start service
+  service:
+    name: haproxy
+    state: started
+    enabled: yes

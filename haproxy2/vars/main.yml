@@ -1,0 +1,8 @@
+---
+# vars file for haproxy2
+add_ports:
+- firewall-cmd --permanent --add-port=80/tcp
+- firewall-cmd --permanent --add-port=80/udp
+- firewall-cmd --permanent --add-port=8080/tcp
+- firewall-cmd --permanent --add-port=8080/udp
+- firewall-cmd --reload

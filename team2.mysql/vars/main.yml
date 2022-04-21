@@ -1,0 +1,23 @@
+---
+# vars file for /home/ansible/roles/team2.mysql
+
+package_list:
+  - httpd
+  - mariadb
+  - mariadb-server
+  - MySQL-python
+  - php 
+  - php-mysql
+  - phpmyadmin
+
+service_list:
+  - httpd
+  - mariadb
+
+roots_password: password 
+
+firewall_services:
+  - http 
+  - mysql 
+
+ip_range: "192.168.1.0/24"

@@ -1,0 +1,47 @@
+---
+# tasks file for haproxy2
+  - name: Install package haproxy
+    yum:
+      name: haproxy
+      state: latest
+
+  - name: Send config file from template
+    template:
+      src: haproxy.cfg
+      dest: /etc/haproxy/haproxy.cfg
+      backup: yes
+
+  - name: Uncommit rsyslog.conf
+    lineinfile:
+      path: /etc/rsyslog.conf
+      regex: '$ModLoad imudp'
+      line:  $ModLoad imudp  
+
+  - name: Uncommit rsyslog.conf
+    lineinfile:
+      path: /etc/rsyslog.conf
+      regex: '$UDPServerRun 514'
+      line: $UDPServerRun 514
+
+  - name: Send config file from template
+    template:
+      src: haproxy.conf
+      dest: /etc/rsyslog.d/
+      backup: yes    
+
+  - name: Start service
+    service:
+      name: rsyslog
+      state: restarted
+      enabled: yes
+
+  - name: add port
+    shell:
+      cmd: "{{ item }}"
+    loop: "{{ add_ports }}"  
+
+  - name: Start service
+    service:
+      name: haproxy
+      state: started
+      enabled: yes

@@ -1,0 +1,52 @@
+---
+# tasks file for /home/ansible/roles/team2.mysql
+- name: Install epel-release repo
+  yum:
+    name: "epel-release"
+    state: latest
+
+- name: Install required packages
+  yum:
+    name: "{{ item }}"
+    state: latest
+  loop: "{{ package_list }}"
+
+- name: Start and enable required services 
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop: "{{ service_list }}"
+  
+- name: Mysql Secure Installation
+  community.mysql.mysql_user:
+    name: root
+    password: "{{ roots_password }}"
+    # update_password: on_create
+    # encrypted: yes
+
+- name: Copy phpmyadmin Template
+  template:
+    dest: /etc/httpd/conf.d/phpMyAdmin.conf
+    src:  phpMyAdmin.conf.j2                ##this file is is not created yet, you need to create it under templates
+
+
+- name: Add services to the Firewall
+  firewalld:
+    state: enabled
+    service: "{{ item }}"
+    permanent: yes
+    immediate: yes
+  loop: "{{ firewall_services }}"
+  
+- name: Restart httpd
+  service: 
+    name: httpd
+    state: restarted
+
+- name: Copy Identity file
+  template:
+    dest: /root/.my.cnf
+    src: my.cnf.j2
+
+
